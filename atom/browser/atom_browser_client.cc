@@ -112,6 +112,13 @@ bool AtomBrowserClient::ShouldCreateNewSiteInstance(
       //  reuse process to allow synchronous cross-window scripting.)
       return true;
     }
+    // In a non-sandboxed renderer with native window open we should
+    // reuse the same site to allow cross-window scripting.  We do
+    // not need to check urls / domains as native window open logic
+    // handles cross site scripting protection.
+    if (RendererUsesNativeWindowOpen(process_id)) {
+      return false;
+    }
   }
 
   // Create new a SiteInstance if navigating to a different site.
