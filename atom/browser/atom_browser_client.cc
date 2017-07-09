@@ -98,13 +98,14 @@ bool AtomBrowserClient::ShouldCreateNewSiteInstance(
 
   int process_id = current_instance->GetProcess()->GetID();
   if (!IsRendererSandboxed(process_id)) {
-    if (!RendererUsesNativeWindowOpen(process_id)) {
+    auto web_contents =
+        content::WebContents::FromRenderFrameHost(render_frame_host);
+    if (!WebContentsPreferences::UsesNativeWindowOpen(web_contents)) {
       // non-sandboxed renderers without native window.open should always create
       // a new SiteInstance
       return true;
     }
-    auto web_contents =
-        content::WebContents::FromRenderFrameHost(render_frame_host);
+    
     if (!ChildWebContentsTracker::IsChildWebContents(web_contents)) {
       // Root WebContents should always create new process to make sure
       // native addons are loaded correctly after reload / navigation.
@@ -116,7 +117,7 @@ bool AtomBrowserClient::ShouldCreateNewSiteInstance(
     // reuse the same site to allow cross-window scripting.  We do
     // not need to check urls / domains as native window open logic
     // handles cross site scripting protection.
-    if (RendererUsesNativeWindowOpen(process_id)) {
+    if (WebContentsPreferences::UsesNativeWindowOpen(web_contents)) {
       return false;
     }
   }
