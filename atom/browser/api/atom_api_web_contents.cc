@@ -506,6 +506,10 @@ void WebContents::AddNewContents(content::WebContents* source,
                                  const gfx::Rect& initial_rect,
                                  bool user_gesture,
                                  bool* was_blocked) {
+  WebContentsPreferences* new_web_preferences =
+        WebContentsPreferences::FromWebContents(new_contents);
+  bool nativeWindowOpen = WebContentsPreferences::UsesNativeWindowOpen(source);
+  new_web_preferences->web_preferences()->SetBoolean("nativeWindowOpen", nativeWindowOpen);
   new ChildWebContentsTracker(new_contents);
   v8::Locker locker(isolate());
   v8::HandleScope handle_scope(isolate());
