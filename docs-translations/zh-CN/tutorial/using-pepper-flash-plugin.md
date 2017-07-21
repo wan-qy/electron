@@ -66,7 +66,7 @@ app.on('ready', () => {
 ## 错误解决
 
 您可以通过在控制台打印 `navigator.plugins` 来检查 Pepper Flash 插件是否加载
- （虽然你不知道插件的路径是正确的)。
+ （虽然你不知道插件的路径是正确的）。
 
 Pepper Flash 插件的操作系统必须和 Electron 的操作系统匹配。在 Windows 中，
 一个常见的错误是对64位版本的 Electron 使用 32bit 版本的 Flash 插件。
